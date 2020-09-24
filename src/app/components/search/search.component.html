@@ -1,0 +1,15 @@
+<h1>iTunes Music Searcher</h1>
+
+<input class="form-control" type="text" name="search" autocomplete="off" (input)="searchMusic($event.target.value)">
+
+<p *ngIf="showMessageTypeFilter">Please type in a filter...</p>
+
+<!-- <div *ngFor="let musicItem of musicList">
+    <p>{{musicItem.trackName}}</p>
+</div> -->
+
+<ng-container *ngIf="(musicList$ | async) as musicList">
+    <p *ngFor="let musicItem of musicList.results">{{musicItem.trackName}}</p>
+</ng-container>
+
+
