@@ -1,1 +1,12 @@
-<p>details works!</p>
+<h1>iTunes Music Searcher</h1>
+
+<a [routerLink]="['/']">Go back</a><p></p>
+
+<div *ngIf="musicItem">
+    <img src="{{ musicItem.artworkUrl100 }}" alt="artwork"> 
+    <h2> {{musicItem.artistName}} - {{musicItem.trackName}}</h2>
+    <p>Preview:</p>
+    <audio controls>
+        <source src="{{musicItem.previewUrl}}" type="audio/x-m4a">
+    </audio>
+</div>

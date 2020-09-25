@@ -6,16 +6,34 @@ import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class MusicService {
-private ITUNES_URL = "https://itunes.apple.com";
+    private ITUNES_URL = "https://itunes.apple.com";
+    data;
 
     constructor(private http: HttpClient) {
 
     }
 
+    getMusicWithId(trackId: string) {
+        if (this.data == undefined) {
+            return null;
+        }
+        let musicItem;
+        this.data.forEach(element => {
+            if (element.trackId == trackId) {
+                musicItem = element;
+            }
+        });
+        return musicItem;
+    }
+
     getMusic(filter: string): Observable<MusicItem[]> {
         console.log('requesting music');
-        return this.http.get<MusicItem[]>(this.ITUNES_URL + `/search?term=${filter}&limit=10`).pipe(
+        let temp = this.http.get<MusicItem[]>(this.ITUNES_URL + `/search?term=${filter}&limit=10`).pipe(
             catchError(err => of([]))
         );
+        temp.subscribe(results => {
+            this.data = results['results'];
+        });
+        return temp;
     }
 }

@@ -9,42 +9,33 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent {
+  displayedColumns: string[] = ['Image', 'Artist', 'Trackname', "DetailsUrl"]
   private searchFilterSubject = new Subject<string>();
-
-/*   readonly musicList$ = this.searchFilterSubject.pipe(
-    debounceTime(250),
-    distinctUntilChanged(),
-    switchMap(filter => this.musicService.getMusic(filter))
-  ).subscribe(
-    data => {
-      return data['results'];
-    }
-  ); */
+  showFilterText = true;
+  showSearchingText = false;
 
   readonly musicList$ = this.searchFilterSubject.pipe(
     debounceTime(250),
     distinctUntilChanged(),
-    switchMap(filter => this.musicService.getMusic(filter))
+    switchMap(filter =>  {
+      let data = this.musicService.getMusic(filter);
+      this.showSearchingText = false;
+      return data;
+    })
   );
-
-  //musicList;
-  showMessageTypeFilter = true;
 
   constructor(private musicService: MusicService) {
 
   }
 
-/*   ngOnInit() {
-    this.musicService.getMusic("madonna").subscribe(
-      data => {
-        this.musicList = data['results'];
-        console.log(this.musicList);
-      }
-    )
-  } */
-
   searchMusic(filter: string) {
     console.log(filter);
+    if (filter != "") {
+      this.showFilterText = false;
+      this.showSearchingText = true;
+    } else {
+      this.showFilterText = true;
+    }
     this.searchFilterSubject.next(filter);
   }
 
