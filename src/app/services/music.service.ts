@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 export class MusicService {
     private ITUNES_URL = "https://itunes.apple.com";
     data;
+    filter = "";
 
     constructor(private http: HttpClient) {
 
@@ -27,13 +28,15 @@ export class MusicService {
     }
 
     getMusic(filter: string): Observable<MusicItem[]> {
-        console.log('requesting music');
-        let temp = this.http.get<MusicItem[]>(this.ITUNES_URL + `/search?term=${filter}&limit=10`).pipe(
-            catchError(err => of([]))
-        );
+        this.filter = filter;
+        let temp = this.http.get<MusicItem[]>(this.ITUNES_URL + `/search?term=${filter}&limit=10`).pipe();
         temp.subscribe(results => {
             this.data = results['results'];
         });
         return temp;
+    }
+
+    getFilter() {
+        return this.filter;
     }
 }

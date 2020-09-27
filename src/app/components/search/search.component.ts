@@ -13,23 +13,31 @@ export class SearchComponent {
   private searchFilterSubject = new Subject<string>();
   showFilterText = true;
   showSearchingText = false;
-
-  readonly musicList$ = this.searchFilterSubject.pipe(
-    debounceTime(250),
-    distinctUntilChanged(),
-    switchMap(filter =>  {
-      let data = this.musicService.getMusic(filter);
-      this.showSearchingText = false;
-      return data;
-    })
-  );
+  data;
 
   constructor(private musicService: MusicService) {
-
+    this.searchFilterSubject.pipe(
+      debounceTime(250),
+      distinctUntilChanged(),
+    ).subscribe(filter => {
+        this.musicService.getMusic(filter).subscribe(data => {
+        this.showSearchingText = false;
+        this.data = data['results'];
+      });
+    })
   }
 
+  ngOnInit() {
+    let filterFromService = this.musicService.getFilter();
+    
+    if (filterFromService != "") {
+      this.showFilterText = false;
+      this.searchFilterSubject.next(filterFromService);
+    }
+  }
+  
+
   searchMusic(filter: string) {
-    console.log(filter);
     if (filter != "") {
       this.showFilterText = false;
       this.showSearchingText = true;

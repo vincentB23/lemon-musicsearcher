@@ -5,8 +5,9 @@
 <p *ngIf="showFilterText">Please type in a filter...</p>
 <p *ngIf="showSearchingText">Searching...</p>
 
-<ng-container *ngIf="(musicList$ | async) as musicList">
-    <table mat-table [dataSource]="musicList.results" class="mat-elevation-z8">
+<!-- <ng-container *ngIf="(musicList$ | async) as musicList"> -->
+<ng-container *ngIf="data">
+    <table mat-table [dataSource]="data" class="mat-elevation-z8">
         <ng-container matColumnDef="Image">
             <th mat-header-cell *matHeaderCellDef style="padding: 10px;"> Image </th>
             <td mat-cell *matCellDef="let element" style="padding: 10px;"> 

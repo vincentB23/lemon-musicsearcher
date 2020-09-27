@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./details.component.css']
 })
 export class DetailsComponent implements OnInit {
-  private musicItem;
+  musicItem;
 
   constructor(
     private musicService: MusicService, 
